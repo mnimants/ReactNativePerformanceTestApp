@@ -6,15 +6,17 @@ import MapView from 'react-native-maps';
 
 export default class MapComponent extends Component {
   render() {
+    let universityLocation = {
+      latitude: 56.9497151,
+      longitude: 24.1145698,
+      latitudeDelta: 0.0045,
+      longitudeDelta: 0.0045,
+    };
+
     return (
       <MapView
       style={{flex: 1}}
-      initialRegion={{
-        latitude: 37.78825,
-        longitude: -122.4324,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }}
+      region={universityLocation}
       />
     );
   }
