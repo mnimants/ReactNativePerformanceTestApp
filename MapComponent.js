@@ -40,20 +40,40 @@ export default class MapComponent extends Component {
     super(props);
     this.intervalId = null;
     this.locationIndex = 0;
+    this.state = {isJumping: false};
   }
 
-  toggleJumping = () => {
-    if(this.intervalId === null) {
-      this.intervalId = setInterval(() => {
-        this.jump();
-      }, intervalBetweenJumps);
+  componentDidMount() {
+    this.startJumping();
+  }
 
+  startJumping = () => {
+    if(this.state.isJumping == true) {
       return;
     }
 
+    this.intervalId = setInterval(() => {
+      this.jump();
+    }, intervalBetweenJumps);
+
+    this.setState({isJumping: true});
+  }
+
+  stopJumping = () => {
     clearInterval(this.intervalId);
     this.intervalId = null;
+    this.setState({isJumping: false});
+    this.locationIndex = 0;
   };
+
+  toggleJumping = () => {
+    if(this.state.isJumping == true) {
+      this.stopJumping();
+    } else {
+      this.startJumping();
+    }
+  };
+
 
   jump = () => {
     console.log("Console: " + this.locationIndex);
@@ -61,7 +81,11 @@ export default class MapComponent extends Component {
     let nextIndex = this.locationIndex + 1;
 
     if(nextIndex == locations.length) {
-      nextIndex = 0;
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+
+      this.setState({isJumping: false});
+      return;
     }
 
     if (this.mapView) {
@@ -83,7 +107,7 @@ export default class MapComponent extends Component {
           />
           <Button
             onPress={this.toggleJumping}
-            title="Toggle jumping"
+            title='Toggle Jumping'
             color="#841584"
             />
       </View>
